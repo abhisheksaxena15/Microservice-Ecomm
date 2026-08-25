@@ -67,6 +67,7 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ error: error.errors });
     }
     res.status(500).json({ error: 'Internal server error' });
+
   }
 });
 
@@ -178,7 +179,8 @@ router.post('/logout', authenticate, async (req, res) => {
 router.get('/oauth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/oauth/google/callback', passport.authenticate('google', { session: false }), async (req, res) => {
-  // Generate tokens for the authenticated user
+  // Generate tokens  and also session false states that to create no default session , passport should not 
+  // createany default sessiona s we ll be using further access and refresh tokens
   const tokens = await generateTokens(req.user.id, req.user.role);
   // In a real app, you might redirect to a frontend with tokens in URL or cookie
   res.json({ message: 'OAuth successful', ...tokens });

@@ -50,3 +50,8 @@ if (require.main === module) {
 }
 
 module.exports = app; // export for testing
+/* 
+app is the Express application object created by express(). It contains all registered middleware, 
+routes, and application configuration. Exporting app allows other files, like auth.test.js, to use the complete
+ Express application for testing without starting the server with app.listen()
+*/
