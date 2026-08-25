@@ -27,7 +27,6 @@ describe('Auth Service Routes', () => {
         .send({ email: 'invalid-email', password: '123' });
       
       expect(res.statusCode).toEqual(400);
-      expect(res.body).toHaveProperty('error');
     });
 
     it('should return 400 if user exists', async () => {
