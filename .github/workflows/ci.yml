@@ -27,3 +27,7 @@ jobs:
     - name: Run Auth Service Tests
       run: npm test
       working-directory: ./services/auth
+
+    - name: Run API Gateway Tests
+      run: npm test
+      working-directory: ./gateway
