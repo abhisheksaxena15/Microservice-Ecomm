@@ -26,9 +26,7 @@ const setupProxies = (app) => {
     const proxy = createProxyMiddleware({
       target: targetUrl,
       changeOrigin: true,
-      pathRewrite: {
-        [`^/api/${serviceName}`]: '/api', // Rewrite /api/auth -> /api for downstream
-      },
+      pathRewrite: (path, req) => req.originalUrl, // Force it to forward the full URL!
       onProxyReq: (proxyReq, req, res) => {
         // Pass the correlation ID downstream
         if (req.correlationId) {

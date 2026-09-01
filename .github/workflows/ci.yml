@@ -20,14 +20,26 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
 
-    - name: Install Root Dependencies
-      run: npm install
-      working-directory: ./
-
-    - name: Run Auth Service Tests
+    - name: Install Auth dependencies
+      run: npm ci
+      working-directory: ./services/auth
+      
+    - name: Run Auth Tests
       run: npm test
       working-directory: ./services/auth
 
-    - name: Run API Gateway Tests
+    - name: Install Gateway dependencies
+      run: npm ci
+      working-directory: ./gateway
+      
+    - name: Run Gateway Tests
       run: npm test
       working-directory: ./gateway
+
+    - name: Install Catalog dependencies
+      run: npm ci
+      working-directory: ./services/catalog
+      
+    - name: Run Catalog Tests
+      run: npm test
+      working-directory: ./services/catalog
