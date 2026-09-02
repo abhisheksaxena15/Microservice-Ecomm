@@ -43,3 +43,11 @@ jobs:
     - name: Run Catalog Tests
       run: npm test
       working-directory: ./services/catalog
+
+    - name: Install Cart dependencies
+      run: npm ci
+      working-directory: ./services/cart
+      
+    - name: Run Cart Tests
+      run: npm test
+      working-directory: ./services/cart
