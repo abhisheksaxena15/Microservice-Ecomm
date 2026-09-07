@@ -1,13 +1,13 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const CircuitBreaker = require('opossum');
 
-// Configuration for downstream services
 const services = {
   auth: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
   catalog: process.env.CATALOG_SERVICE_URL || 'http://localhost:3002',
-  order: process.env.ORDER_SERVICE_URL || 'http://localhost:3003',
-  payment: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3004',
-  inventory: process.env.INVENTORY_SERVICE_URL || 'http://localhost:3005',
+  cart: process.env.CART_SERVICE_URL || 'http://localhost:3003',
+  order: process.env.ORDER_SERVICE_URL || 'http://localhost:3004',
+  payment: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3005',
+  inventory: process.env.INVENTORY_SERVICE_URL || 'http://localhost:3006',
 };
 
 // Circuit Breaker options

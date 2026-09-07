@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 const pool = new Pool({
-  user: process.env.POSTGRES_USER || 'ecommerce_user',
+  user: process.env.POSTGRES_USER || 'admin',
   host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'ecommerce',
-  password: process.env.POSTGRES_PASSWORD || 'secretpassword',
+  database: process.env.POSTGRES_DB || 'auth_db',
+  password: process.env.POSTGRES_PASSWORD || 'password',
   port: process.env.POSTGRES_PORT || 5432,
 });
 
