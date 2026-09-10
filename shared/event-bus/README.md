@@ -21,7 +21,21 @@ If we pass an `orderId` as the key, Kafka guarantees that every event related to
 
 ---
 
-## Upcoming (Day 6 - Part 2)
-In the next steps, we will be adding the `EventConsumer` to this package, which will feature:
-1. **Manual Offset Committing:** To prevent message loss if a service crashes mid-processing.
-2. **Dead-Letter Queues (DLQ):** To catch "poison pill" messages that fail repeatedly, moving them to a safe `.dlq` topic so the system doesn't get infinitely stuck.
+## What We Have Built So Far (Day 6 - Part 2)
+
+### The Resilient Consumer
+The `EventConsumer` wrapper (`src/consumer.js`) is designed to prevent data loss when consuming events from Kafka.
+
+#### 1. Manual Offset Committing
+By default, Kafka automatically commits an offset (marks a message as "read") the moment it is handed to a consumer. 
+**The Problem:** If our microservice crashes *while* processing the message (e.g. while saving to the database), the message is lost forever because Kafka thinks we already processed it!
+**The Solution:** We set `autoCommit: false`. Our consumer processes the message entirely, and *only* when the database save is successful do we run `commitOffsets()`. If the service crashes, Kafka will re-deliver the message when the service restarts.
+
+#### 2. Dead-Letter Queues (DLQ)
+What happens if a message is fundamentally broken (a "poison pill") and causes our code to throw an error every single time? With manual offsets, the service would get stuck in an infinite loop, constantly crashing and retrying the same bad message forever.
+**The Solution:** Our wrapper catches errors and implements a retry loop with exponential backoff (e.g. retrying 3 times). If it fails on the final attempt, our Consumer takes the broken payload and publishes it to a special `<topic>.dlq` topic (Dead Letter Queue). It then commits the offset to unblock the system. Engineers can monitor the DLQ topic and fix the broken messages manually!
+
+---
+
+## Upcoming (Day 6 - Part 3)
+We will perform the "Ping-Pong" test! We will wire this new library into the **Catalog** and **Cart** services, and broadcast a dummy event across our local Kafka broker to see the DLQ and Consumer in action.
