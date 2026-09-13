@@ -4,6 +4,14 @@ const redisClient = require('../src/db/redis');
 const { getProduct } = require('../src/services/catalogClient');
 
 // Mock dependencies
+jest.mock('event-bus', () => {
+  return {
+    EventConsumer: jest.fn().mockImplementation(() => ({
+      connect: jest.fn().mockResolvedValue(),
+      subscribe: jest.fn().mockResolvedValue()
+    }))
+  };
+}, { virtual: true });
 jest.mock('../src/db/redis', () => ({
   hGetAll: jest.fn(),
   hGet: jest.fn(),

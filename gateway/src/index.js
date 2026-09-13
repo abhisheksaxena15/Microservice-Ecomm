@@ -12,20 +12,15 @@ app.use(correlationIdMiddleware);
 // 2. Apply Redis Rate Limiting to prevent abuse
 app.use(rateLimiter);
 
-// 3. Optional: Global request logging
-app.use((req, res, next) => {
-  console.log(`[Gateway] [${req.correlationId}] ${req.method} ${req.url}`);
-  next();
-});
-// 4. Setup Microservice Proxies with Circuit Breakers
+// 3. Setup Microservice Proxies with Circuit Breakers
 setupProxies(app);
 
-// 5. Health Check for Gateway itself
+// 4. Health Check for Gateway itself
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP', service: 'API Gateway' });
 });
 
-// 6. Global Error Handler
+// 5. Global Error Handler
 app.use((err, req, res, next) => {
   console.error(`[Gateway Error] [${req.correlationId}]`, err);
   if (!res.headersSent) {

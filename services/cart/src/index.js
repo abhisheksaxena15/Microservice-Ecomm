@@ -2,6 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const cartRoutes = require('./routes/cart');
+const { EventConsumer } = require('event-bus');
+
+const consumer = new EventConsumer('cart-service', 'cart-group', ['localhost:9092']);
 
 const app = express();
 
@@ -19,8 +22,13 @@ app.get('/health', (req, res) => {
 const PORT = process.env.PORT || 3003;
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  app.listen(PORT, async () => {
     console.log(`Cart service listening on port ${PORT}`);
+    
+    // Subscribe to the Ping-Pong event from Catalog!
+    await consumer.subscribe('test.topic', async (payload) => {
+      console.log('🎉 [Cart Service] Received Ping-Pong Event from Kafka:', payload);
+    }).catch(console.error);
   });
 }
 

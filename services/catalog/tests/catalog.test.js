@@ -4,6 +4,14 @@ const db = require('../src/db');
 const { getCached, setCached } = require('../src/cache/redis');
 
 // Mock dependencies
+jest.mock('event-bus', () => {
+  return {
+    EventProducer: jest.fn().mockImplementation(() => ({
+      connect: jest.fn().mockResolvedValue(),
+      publish: jest.fn().mockResolvedValue(true)
+    }))
+  };
+}, { virtual: true });
 jest.mock('../src/db', () => ({
   query: jest.fn()
 }));
